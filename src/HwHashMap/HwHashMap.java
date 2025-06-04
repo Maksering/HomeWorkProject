@@ -2,7 +2,7 @@ package HwHashMap;
 
 public class HwHashMap<K,V> {
     private MapElement<K,V>[] table;
-    private float loadFactor;
+    private final float loadFactor;
     private int currentSize;
 
     public HwHashMap(){
@@ -23,7 +23,8 @@ public class HwHashMap<K,V> {
         int index = keyHash & (table.length-1);
 
         for(MapElement<K,V> elm=table[index]; elm!=null; elm=elm.nextElement){
-            if(hash(elm.key) == keyHash && (elm.key==key || key.equals(elm.key))){
+            //Key проверяется в начале каждого метода на null. Добавил еще проверку elm.key
+            if(elm.key != null && (hash(elm.key) == keyHash && (elm.key==key || key.equals(elm.key)))){
                 return elm.value;
             }
         }
@@ -39,7 +40,7 @@ public class HwHashMap<K,V> {
         int index = keyHash & (table.length-1);
 
         for(MapElement<K,V> elm=table[index]; elm!=null; elm=elm.nextElement){
-            if(hash(elm.key) == keyHash && (elm.key==key || key.equals(elm.key))){
+            if(elm.key != null && (hash(elm.key) == keyHash && (elm.key==key || key.equals(elm.key)))){
                 V prevVal=elm.value;
                 elm.value= value;
                 return prevVal;
@@ -66,7 +67,7 @@ public class HwHashMap<K,V> {
 
         while (elm!=null){
             MapElement<K,V> nextElm=elm.nextElement;
-            if(hash(elm.key) == keyHash && (elm.key==key || key.equals(elm.key))) {
+            if(elm.key != null && (hash(elm.key) == keyHash && (elm.key==key || key.equals(elm.key)))) {
                 if(prevEl==elm){
                     table[index]=nextElm;
                 }
@@ -90,7 +91,7 @@ public class HwHashMap<K,V> {
     private  void resize(int capacity){
         MapElement<K,V>[] oldTable = table;
         MapElement<K,V>[] newTable = new MapElement[capacity];
-        for(int i = 0;i<oldTable.length;i++) {
+        for(int i = 0; i<oldTable.length; i++) {
             MapElement<K, V> elm = oldTable[i];
             while (elm != null) {
 
