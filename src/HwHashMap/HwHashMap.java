@@ -51,7 +51,7 @@ public class HwHashMap<K,V> {
         if(currentSize++>=table.length*loadFactor){
             resize(2*table.length);
         }
-        return null;
+        return value;
     }
 
     public V remove(K key){
